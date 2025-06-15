@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototype Conveyor Pakan Kambing Bertenaga Surya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .prototype-viewer {
+            padding: 40px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .conveyor-system {
+            position: relative;
+            background: #2c3e50;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .solar-panel {
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
+            border: 3px solid #34495e;
+            border-radius: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 5px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .solar-cell {
+            width: calc(33.33% - 2px);
+            height: calc(50% - 2px);
+            background: #3498db;
+            margin: 1px;
+            border-radius: 2px;
+            animation: solarGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes solarGlow {
+            0% { background: #3498db; }
+            100% { background: #5dade2; }
+        }
+        
+        .conveyor-belt {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(to right, #34495e 0%, #2c3e50 50%, #34495e 100%);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #1abc9c;
+            margin: 20px 0;
+        }
+        
+        .belt-surface {
+            width: 200%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                #1abc9c 0px,
+                #16a085 20px,
+                #1abc9c 40px
+            );
+            position: absolute;
+            top: 0;
+            left: -100%;
+            animation: beltMove 4s linear infinite;
+        }
+        
+        @keyframes beltMove {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(50%); }
+        }
+        
+        .feed-hopper {
+            position: absolute;
+            left: -30px;
+            top: -40px;
+            width: 80px;
+            height: 100px;
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+            border: 2px solid #c0392b;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feed-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #f39c12;
+            border-radius: 50%;
+            animation: feedDrop 2s linear infinite;
+        }
+        
+        .particle:nth-child(1) { left: 30%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 50%; animation-delay: 0.5s; }
+        .particle:nth-child(3) { left: 70%; animation-delay: 1s; }
+        
+        @keyframes feedDrop {
+            0% {
+                top: 20%;
+                opacity: 1;
+            }
+            100% {
+                top: 90%;
+                opacity: 0;
+            }
+        }
+        
+        .motor-unit {
+            position: absolute;
+            right: -20px;
+            top: 15px;
+            width: 40px;
+            height: 30px;
+            background: linear-gradient(45deg, #8e44ad, #9b59b6);
+            border-radius: 8px;
+            border: 2px solid #6c3483;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .motor-shaft {
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 4px;
+            background: #34495e;
+            border-radius: 2px;
+            animation: motorSpin 1s linear infinite;
+        }
+        
+        @keyframes motorSpin {
+            0% { transform: translateY(-50%) rotate(0deg); }
+            100% { transform: translateY(-50%) rotate(360deg); }
+        }
+        
+        .feeding-trough {
+            position: absolute;
+            right: -50px;
+            top: 30px;
+            width: 100px;
+            height: 40px;
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            border-radius: 20px;
+            border: 3px solid #34495e;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .specifications {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .spec-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #3498db;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .spec-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .spec-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+        
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px dotted #bdc3c7;
+        }
+        
+        .spec-label {
+            font-weight: bold;
+            color: #34495e;
+        }
+        
+        .spec-value {
+            color: #27ae60;
+            font-weight: 500;
+        }
+        
+        .benefits {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .benefits h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .benefit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .benefit-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .benefit-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .control-panel {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .control-button {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .status-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 15px;
+            height: 15px;
+            background: #2ecc71;
+            border-radius: 50%;
+            animation: statusBlink 2s ease-in-out infinite;
+        }
+        
+        @keyframes statusBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐐 Conveyor Pakan Kambing Bertenaga Surya</h1>
+            <p>Sistem Otomatis Pemberian Pakan Ramah Lingkungan</p>
+        </div>
+        
+        <div class="prototype-viewer">
+            <div class="conveyor-system">
+                <div class="solar-panel">
+                    <div class="solar-cell"></div>
+                    <div class="solar-cell"></div>
+                    <div class="solar-cell"></div>
+                    <div class="solar-cell"></div>
+                    <div class="solar-cell"></div>
+                    <div class="solar-cell"></div>
+                </div>
+                
+                <div class="feed-hopper">
+                    <div class="feed-particles">
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                    </div>
+                </div>
+                
+                <div class="conveyor-belt">
+                    <div class="belt-surface"></div>
+                </div>
+                
+                <div class="motor-unit">
+                    <div class="motor-shaft"></div>
+                </div>
+                
+                <div class="feeding-trough"></div>
+                
+                <div class="control-panel">
+                    <div class="status-indicator"></div>
+                    <h4>Panel Kontrol</h4>
+                    <button class="control-button" onclick="toggleSystem()">Start/Stop</button>
+                    <button class="control-button" onclick="adjustSpeed()">Atur Kecepatan</button>
+                    <button class="control-button" onclick="setTimer()">Set Timer</button>
+                    <span id="status-text" style="margin-left: 20px;">Status: Aktif</span>
+                </div>
+            </div>
+            
+            <div class="specifications">
+                <div class="spec-card">
+                    <h3>⚡ Sistem Tenaga Surya</h3>
+                    <div class="spec-item">
+                        <span class="spec-label">Panel Surya:</span>
+                        <span class="spec-value">50W Monokristalin</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Baterai:</span>
+                        <span class="spec-value">12V 20Ah Li-ion</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Inverter:</span>
+                        <span class="spec-value">PWM 12V-24V</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Daya Operasi:</span>
+                        <span class="spec-value">25-30W</span>
+                    </div>
+                </div>
+                
+                <div class="spec-card">
+                    <h3>🔧 Komponen Mekanik</h3>
+                    <div class="spec-item">
+                        <span class="spec-label">Panjang Belt:</span>
+                        <span class="spec-value">3-5 meter</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Lebar Belt:</span>
+                        <span class="spec-value">30 cm</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Motor:</span>
+                        <span class="spec-value">DC 12V Gearbox</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Kecepatan:</span>
+                        <span class="spec-value">0.1-0.5 m/s</span>
+                    </div>
+                </div>
+                
+                <div class="spec-card">
+                    <h3>📊 Kapasitas & Kontrol</h3>
+                    <div class="spec-item">
+                        <span class="spec-label">Hopper Pakan:</span>
+                        <span class="spec-value">50-100 kg</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Distribusi/jam:</span>
+                        <span class="spec-value">5-20 kg</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Timer:</span>
+                        <span class="spec-value">Programmable</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Sensor:</span>
+                        <span class="spec-value">Level & Proximity</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="benefits">
+                <h3>🌟 Keunggulan Sistem</h3>
+                <div class="benefit-grid">
+                    <div class="benefit-item">
+                        <span class="benefit-icon">☀️</span>
+                        <strong>Hemat Energi</strong><br>
+                        100% tenaga surya, ramah lingkungan
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">⏰</span>
+                        <strong>Otomatis</strong><br>
+                        Pemberian pakan terjadwal
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">💰</span>
+                        <strong>Efisien Biaya</strong><br>
+                        Mengurangi tenaga kerja
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🎯</span>
+                        <strong>Presisi</strong><br>
+                        Kontrol porsi yang akurat
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🔧</span>
+                        <strong>Mudah Maintenance</strong><br>
+                        Perawatan minimal
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">📱</span>
+                        <strong>Smart Control</strong><br>
+                        Dapat dimonitoring jarak jauh
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let systemRunning = true;
+        let currentSpeed = 'Normal';
+        
+        function toggleSystem() {
+            systemRunning = !systemRunning;
+            const statusText = document.getElementById('status-text');
+            const beltSurface = document.querySelector('.belt-surface');
+            const motorShaft = document.querySelector('.motor-shaft');
+            const particles = document.querySelectorAll('.particle');
+            
+            if (systemRunning) {
+                statusText.textContent = 'Status: Aktif';
+                beltSurface.style.animationPlayState = 'running';
+                motorShaft.style.animationPlayState = 'running';
+                particles.forEach(p => p.style.animationPlayState = 'running');
+            } else {
+                statusText.textContent = 'Status: Berhenti';
+                beltSurface.style.animationPlayState = 'paused';
+                motorShaft.style.animationPlayState = 'paused';
+                particles.forEach(p => p.style.animationPlayState = 'paused');
+            }
+        }
+        
+        function adjustSpeed() {
+            const speeds = ['Lambat', 'Normal', 'Cepat'];
+            const currentIndex = speeds.indexOf(currentSpeed);
+            currentSpeed = speeds[(currentIndex + 1) % speeds.length];
+            
+            const beltSurface = document.querySelector('.belt-surface');
+            const durations = { 'Lambat': '6s', 'Normal': '4s', 'Cepat': '2s' };
+            beltSurface.style.animationDuration = durations[currentSpeed];
+            
+            alert(`Kecepatan diatur ke: ${currentSpeed}`);
+        }
+        
+        function setTimer() {
+            const time = prompt('Masukkan waktu pemberian pakan (jam):', '6');
+            if (time) {
+                alert(`Timer diset untuk ${time} jam dari sekarang`);
+            }
+        }
+        
+        // Simulasi perubahan cuaca pada panel surya
+        setInterval(() => {
+            const solarCells = document.querySelectorAll('.solar-cell');
+            const brightness = Math.random() * 0.3 + 0.7;
+            solarCells.forEach(cell => {
+                cell.style.filter = `brightness(${brightness})`;
+            });
+        }, 3000);
+    </script>
+</body>
+</html>
